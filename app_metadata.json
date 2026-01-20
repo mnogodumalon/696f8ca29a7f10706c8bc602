@@ -1,0 +1,395 @@
+{
+  "appgroup_id": "696f8ca29a7f10706c8bc602",
+  "appgroup_name": "Werkzeugmanagement",
+  "apps": {
+    "werkzeuge": {
+      "app_id": "696f8c7334d65b459b907abf",
+      "name": "Werkzeuge",
+      "controls": {
+        "werkzeugname": {
+          "identifier": "werkzeugname",
+          "label": "Werkzeugname",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        },
+        "kategorie": {
+          "identifier": "kategorie",
+          "label": "Kategorie",
+          "type": "lookup",
+          "subtype": "select",
+          "fulltype": "lookup/select",
+          "description": "One selected option of multiple available options (or `null`).\n\nThe available options are defined in the `lookup_data` attribute of this control's LivingApp.\n\nThe field value will be the key in this `lookup_data` attribute or `null`.",
+          "lookup_data": {
+            "messgeraete": "Messger\u00e4te",
+            "pruefgeraete": "Pr\u00fcfger\u00e4te",
+            "leitern_gerueste": "Leitern und Ger\u00fcste",
+            "kabel_leitungen": "Kabel und Leitungen",
+            "sonstiges": "Sonstiges",
+            "elektrowerkzeuge": "Elektrowerkzeuge",
+            "handwerkzeuge": "Handwerkzeuge"
+          }
+        },
+        "hersteller": {
+          "identifier": "hersteller",
+          "label": "Hersteller",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        },
+        "modellnummer": {
+          "identifier": "modellnummer",
+          "label": "Modellnummer",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        },
+        "seriennummer": {
+          "identifier": "seriennummer",
+          "label": "Seriennummer",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        },
+        "kaufdatum": {
+          "identifier": "kaufdatum",
+          "label": "Kaufdatum",
+          "type": "date",
+          "subtype": "date",
+          "fulltype": "date/date",
+          "description": "A calendar date consisting of year, month and day. (Or `null`/`None`)\n\nThe field value will be a string in the format `<YYYY>-<MM>-<DD>` or `null`.\n\nFor example: `1642-12-25`."
+        },
+        "kaufpreis": {
+          "identifier": "kaufpreis",
+          "label": "Kaufpreis (EUR)",
+          "type": "number",
+          "subtype": null,
+          "fulltype": "number",
+          "description": "A decimal number value (or `null`).",
+          "precision": null
+        },
+        "zustand": {
+          "identifier": "zustand",
+          "label": "Aktueller Zustand",
+          "type": "lookup",
+          "subtype": "select",
+          "fulltype": "lookup/select",
+          "description": "One selected option of multiple available options (or `null`).\n\nThe available options are defined in the `lookup_data` attribute of this control's LivingApp.\n\nThe field value will be the key in this `lookup_data` attribute or `null`.",
+          "lookup_data": {
+            "neu": "Neu",
+            "sehr_gut": "Sehr gut",
+            "gut": "Gut",
+            "befriedigend": "Befriedigend",
+            "reparaturbeduerftig": "Reparaturbed\u00fcrftig",
+            "defekt": "Defekt"
+          }
+        },
+        "lagerort": {
+          "identifier": "lagerort",
+          "label": "Lagerort",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        }
+      }
+    },
+    "mitarbeiter": {
+      "app_id": "696f8c7b968ea65b5fb99bc6",
+      "name": "Mitarbeiter",
+      "controls": {
+        "vorname": {
+          "identifier": "vorname",
+          "label": "Vorname",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        },
+        "nachname": {
+          "identifier": "nachname",
+          "label": "Nachname",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        },
+        "personalnummer": {
+          "identifier": "personalnummer",
+          "label": "Personalnummer",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        },
+        "abteilung": {
+          "identifier": "abteilung",
+          "label": "Abteilung",
+          "type": "lookup",
+          "subtype": "select",
+          "fulltype": "lookup/select",
+          "description": "One selected option of multiple available options (or `null`).\n\nThe available options are defined in the `lookup_data` attribute of this control's LivingApp.\n\nThe field value will be the key in this `lookup_data` attribute or `null`.",
+          "lookup_data": {
+            "elektroinstallation": "Elektroinstallation",
+            "wartung_service": "Wartung und Service",
+            "planung": "Planung",
+            "verwaltung": "Verwaltung",
+            "lager": "Lager"
+          }
+        },
+        "telefonnummer": {
+          "identifier": "telefonnummer",
+          "label": "Telefonnummer",
+          "type": "string",
+          "subtype": "tel",
+          "fulltype": "string/tel",
+          "description": "A valid telephone number. Might include country prefix and should include area code (or `null`)."
+        },
+        "email": {
+          "identifier": "email",
+          "label": "E-Mail",
+          "type": "string",
+          "subtype": "email",
+          "fulltype": "string/email",
+          "description": "A valid email address (or `null`)."
+        }
+      }
+    },
+    "projekte": {
+      "app_id": "696f8c7cbb8d1cc8e4f308cb",
+      "name": "Projekte",
+      "controls": {
+        "projektname": {
+          "identifier": "projektname",
+          "label": "Projektname",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        },
+        "projektnummer": {
+          "identifier": "projektnummer",
+          "label": "Projektnummer",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        },
+        "kundenname": {
+          "identifier": "kundenname",
+          "label": "Kundenname",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        },
+        "strasse": {
+          "identifier": "strasse",
+          "label": "Stra\u00dfe",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        },
+        "hausnummer": {
+          "identifier": "hausnummer",
+          "label": "Hausnummer",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        },
+        "postleitzahl": {
+          "identifier": "postleitzahl",
+          "label": "Postleitzahl",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        },
+        "stadt": {
+          "identifier": "stadt",
+          "label": "Stadt",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        },
+        "startdatum": {
+          "identifier": "startdatum",
+          "label": "Startdatum",
+          "type": "date",
+          "subtype": "date",
+          "fulltype": "date/date",
+          "description": "A calendar date consisting of year, month and day. (Or `null`/`None`)\n\nThe field value will be a string in the format `<YYYY>-<MM>-<DD>` or `null`.\n\nFor example: `1642-12-25`."
+        },
+        "enddatum": {
+          "identifier": "enddatum",
+          "label": "Enddatum",
+          "type": "date",
+          "subtype": "date",
+          "fulltype": "date/date",
+          "description": "A calendar date consisting of year, month and day. (Or `null`/`None`)\n\nThe field value will be a string in the format `<YYYY>-<MM>-<DD>` or `null`.\n\nFor example: `1642-12-25`."
+        },
+        "projektleiter": {
+          "identifier": "projektleiter",
+          "label": "Projektleiter",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        }
+      }
+    },
+    "werkzeugzuweisung": {
+      "app_id": "696f8c7d4b3dfccc760e252e",
+      "name": "Werkzeugzuweisung",
+      "controls": {
+        "werkzeug": {
+          "identifier": "werkzeug",
+          "label": "Werkzeug",
+          "type": "applookup",
+          "subtype": "select",
+          "fulltype": "applookup/select",
+          "description": "A reference to another LivingApp record from a target lookup app (or `null`).\n\nThe field value will be a valid record URL in the form `https://<hostname>/rest/apps/<app-id>/records/<record-id>` or `null`.",
+          "lookup_app": "https://my.living-apps.de/rest/apps/696f8c7334d65b459b907abf"
+        },
+        "mitarbeiter": {
+          "identifier": "mitarbeiter",
+          "label": "Mitarbeiter",
+          "type": "applookup",
+          "subtype": "select",
+          "fulltype": "applookup/select",
+          "description": "A reference to another LivingApp record from a target lookup app (or `null`).\n\nThe field value will be a valid record URL in the form `https://<hostname>/rest/apps/<app-id>/records/<record-id>` or `null`.",
+          "lookup_app": "https://my.living-apps.de/rest/apps/696f8c7b968ea65b5fb99bc6"
+        },
+        "projekt": {
+          "identifier": "projekt",
+          "label": "Projekt (optional)",
+          "type": "applookup",
+          "subtype": "select",
+          "fulltype": "applookup/select",
+          "description": "A reference to another LivingApp record from a target lookup app (or `null`).\n\nThe field value will be a valid record URL in the form `https://<hostname>/rest/apps/<app-id>/records/<record-id>` or `null`.",
+          "lookup_app": "https://my.living-apps.de/rest/apps/696f8c7cbb8d1cc8e4f308cb"
+        },
+        "zuweisungsdatum": {
+          "identifier": "zuweisungsdatum",
+          "label": "Zuweisungsdatum",
+          "type": "date",
+          "subtype": "date",
+          "fulltype": "date/date",
+          "description": "A calendar date consisting of year, month and day. (Or `null`/`None`)\n\nThe field value will be a string in the format `<YYYY>-<MM>-<DD>` or `null`.\n\nFor example: `1642-12-25`."
+        },
+        "geplante_rueckgabe": {
+          "identifier": "geplante_rueckgabe",
+          "label": "Geplante R\u00fcckgabe",
+          "type": "date",
+          "subtype": "date",
+          "fulltype": "date/date",
+          "description": "A calendar date consisting of year, month and day. (Or `null`/`None`)\n\nThe field value will be a string in the format `<YYYY>-<MM>-<DD>` or `null`.\n\nFor example: `1642-12-25`."
+        },
+        "tatsaechliche_rueckgabe": {
+          "identifier": "tatsaechliche_rueckgabe",
+          "label": "Tats\u00e4chliche R\u00fcckgabe",
+          "type": "date",
+          "subtype": "date",
+          "fulltype": "date/date",
+          "description": "A calendar date consisting of year, month and day. (Or `null`/`None`)\n\nThe field value will be a string in the format `<YYYY>-<MM>-<DD>` or `null`.\n\nFor example: `1642-12-25`."
+        },
+        "notizen": {
+          "identifier": "notizen",
+          "label": "Notizen",
+          "type": "string",
+          "subtype": "textarea",
+          "fulltype": "string/textarea",
+          "description": "A string value that can contain multiple lines of text (or `null`)."
+        }
+      }
+    },
+    "wartung": {
+      "app_id": "696f8c7ee5875b7ce993a752",
+      "name": "Wartung",
+      "controls": {
+        "werkzeug": {
+          "identifier": "werkzeug",
+          "label": "Werkzeug",
+          "type": "applookup",
+          "subtype": "select",
+          "fulltype": "applookup/select",
+          "description": "A reference to another LivingApp record from a target lookup app (or `null`).\n\nThe field value will be a valid record URL in the form `https://<hostname>/rest/apps/<app-id>/records/<record-id>` or `null`.",
+          "lookup_app": "https://my.living-apps.de/rest/apps/696f8c7334d65b459b907abf"
+        },
+        "wartungstyp": {
+          "identifier": "wartungstyp",
+          "label": "Wartungstyp",
+          "type": "lookup",
+          "subtype": "select",
+          "fulltype": "lookup/select",
+          "description": "One selected option of multiple available options (or `null`).\n\nThe available options are defined in the `lookup_data` attribute of this control's LivingApp.\n\nThe field value will be the key in this `lookup_data` attribute or `null`.",
+          "lookup_data": {
+            "inspektion": "Inspektion",
+            "reparatur": "Reparatur",
+            "kalibrierung": "Kalibrierung",
+            "reinigung": "Reinigung",
+            "pruefung_dguv_v3": "Pr\u00fcfung nach DGUV V3",
+            "sonstiges": "Sonstiges"
+          }
+        },
+        "wartungsdatum": {
+          "identifier": "wartungsdatum",
+          "label": "Wartungsdatum",
+          "type": "date",
+          "subtype": "date",
+          "fulltype": "date/date",
+          "description": "A calendar date consisting of year, month and day. (Or `null`/`None`)\n\nThe field value will be a string in the format `<YYYY>-<MM>-<DD>` or `null`.\n\nFor example: `1642-12-25`."
+        },
+        "durchgefuehrt_von": {
+          "identifier": "durchgefuehrt_von",
+          "label": "Durchgef\u00fchrt von",
+          "type": "string",
+          "subtype": "text",
+          "fulltype": "string/text",
+          "description": "A string value not longer than 4000 characters (or `null`)."
+        },
+        "kosten": {
+          "identifier": "kosten",
+          "label": "Kosten (EUR)",
+          "type": "number",
+          "subtype": null,
+          "fulltype": "number",
+          "description": "A decimal number value (or `null`).",
+          "precision": null
+        },
+        "naechste_wartung": {
+          "identifier": "naechste_wartung",
+          "label": "N\u00e4chste Wartung f\u00e4llig am",
+          "type": "date",
+          "subtype": "date",
+          "fulltype": "date/date",
+          "description": "A calendar date consisting of year, month and day. (Or `null`/`None`)\n\nThe field value will be a string in the format `<YYYY>-<MM>-<DD>` or `null`.\n\nFor example: `1642-12-25`."
+        },
+        "notizen_wartung": {
+          "identifier": "notizen_wartung",
+          "label": "Notizen",
+          "type": "string",
+          "subtype": "textarea",
+          "fulltype": "string/textarea",
+          "description": "A string value that can contain multiple lines of text (or `null`)."
+        }
+      }
+    }
+  },
+  "metadata": {
+    "apps_list": [
+      "Werkzeuge",
+      "Mitarbeiter",
+      "Projekte",
+      "Werkzeugzuweisung",
+      "Wartung"
+    ]
+  }
+}
