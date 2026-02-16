@@ -5,12 +5,10 @@ import subprocess
 import os
 
 async def main():
-    # 1. Metadaten lesen
-    try:
-        with open("/home/user/app/CLAUDE.md", "r") as f:
-            instructions = f.read()
-    except:
-        print("Kein CLAUDE.md")
+    # Skills and CLAUDE.md are loaded automatically by Claude SDK from cwd
+    # No manual instruction loading needed - the SDK reads:
+    # - /home/user/app/CLAUDE.md (copied from SANDBOX_PROMPT.md)
+    # - /home/user/app/.claude/skills/ (copied from sandbox_skills/)
 
     def run_git_cmd(cmd: str):
         """Executes a Git command and throws an error on failure"""
@@ -51,8 +49,27 @@ async def main():
                 run_git_cmd("git checkout -b main")
                 run_git_cmd(f"git remote add origin {git_push_url}")
             
-            # Neuen Code committen
+            # Mit HOME=/home/user/app schreibt das SDK direkt nach /home/user/app/.claude/
+            # Kein Kopieren nötig! .claude ist bereits im Repo-Ordner.
+            print("[DEPLOY] 💾 Session wird mit Code gepusht (HOME=/home/user/app)")
+            
+            # Session ID wird später von ResultMessage gespeichert
+            # Hier nur prüfen ob .claude existiert
+            check_result = subprocess.run(
+                "ls /home/user/app/.claude 2>&1",
+                shell=True,
+                capture_output=True,
+                text=True
+            )
+            if check_result.returncode == 0:
+                print("[DEPLOY] ✅ .claude/ vorhanden - wird mit gepusht")
+            else:
+                print("[DEPLOY] ⚠️ .claude/ nicht gefunden")
+            
+            # Neuen Code committen (includes .claude/ direkt im Repo)
             run_git_cmd("git add -A")
+            # Force add .claude (exclude debug/ - may contain secrets)
+            subprocess.run("git add -f .claude ':!.claude/debug' .claude_session_id 2>/dev/null", shell=True, cwd="/home/user/app")
             run_git_cmd("git commit -m 'Lilo Auto-Deploy' --allow-empty")
             run_git_cmd("git push origin main")
             
@@ -148,28 +165,87 @@ async def main():
     )
 
     # 3. Optionen konfigurieren
+    # setting_sources=["project"] is REQUIRED to load CLAUDE.md and .claude/skills/ from cwd
     options = ClaudeAgentOptions(
         system_prompt={
             "type": "preset",
-            "preset": "claude_code",
-            "append": instructions
+            "preset": "claude_code"
         },
+        setting_sources=["project"],  # Required: loads CLAUDE.md and .claude/skills/
         mcp_servers={"deploy_tools": deployment_server},
         permission_mode="acceptEdits",
         allowed_tools=["Bash", "Write", "Read", "Edit", "Glob", "Grep", "Task", "TodoWrite",
         "mcp__deploy_tools__deploy_to_github"
         ],
         cwd="/home/user/app",
-        model="claude-sonnet-4-5-20250929",
+        model="claude-opus-4-6", #"claude-sonnet-4-5-20250929"
     )
+
+    # Session-Resume Unterstützung
+    resume_session_id = os.getenv('RESUME_SESSION_ID')
+    if resume_session_id:
+        options.resume = resume_session_id
+        print(f"[LILO] Resuming session: {resume_session_id}")
+
+    # User Prompt - prefer file over env var (handles special chars better)
+    user_prompt = None
+    
+    # First try reading from file (more reliable for special chars like umlauts)
+    prompt_file = "/home/user/app/.user_prompt"
+    if os.path.exists(prompt_file):
+        try:
+            with open(prompt_file, 'r') as f:
+                user_prompt = f.read().strip()
+            if user_prompt:
+                print(f"[LILO] Prompt aus Datei gelesen: {len(user_prompt)} Zeichen")
+        except Exception as e:
+            print(f"[LILO] Fehler beim Lesen der Prompt-Datei: {e}")
+    
+    # Fallback to env var (for backwards compatibility)
+    if not user_prompt:
+        user_prompt = os.getenv('USER_PROMPT')
+        if user_prompt:
+            print(f"[LILO] Prompt aus ENV gelesen")
+    
+    if user_prompt:
+        # Continue/Resume-Mode: Custom prompt vom User
+        query = f"""🚨 AUFGABE: Du MUSST das existierende Dashboard ändern und deployen!
+
+User-Anfrage: "{user_prompt}"
+
+PFLICHT-SCHRITTE (alle müssen ausgeführt werden):
+
+1. LESEN: Lies src/pages/Dashboard.tsx um die aktuelle Struktur zu verstehen
+2. ÄNDERN: Implementiere die User-Anfrage mit dem Edit-Tool
+3. TESTEN: Führe 'npm run build' aus um sicherzustellen dass es kompiliert
+4. DEPLOYEN: Rufe deploy_to_github auf um die Änderungen zu pushen
+
+⚠️ KRITISCH:
+- Du MUSST Änderungen am Code machen (Edit-Tool verwenden!)
+- Du MUSST am Ende deploy_to_github aufrufen!
+- Beende NICHT ohne zu deployen!
+- Analysieren alleine reicht NICHT - du musst HANDELN!
+
+Das Dashboard existiert bereits. Mache NUR die angeforderten Änderungen, nicht mehr.
+Starte JETZT mit Schritt 1!"""
+        print(f"[LILO] Continue-Mode mit User-Prompt: {user_prompt}")
+    else:
+        # Normal-Mode: Neues Dashboard bauen
+        query = (
+            "Use frontend-design Skill to create analyse app structure and generate design_brief.md"
+            "Build the Dashboard.tsx following design_brief.md exactly. "
+            "Use existing types and services from src/types/ and src/services/. "
+            "Deploy when done using the deploy_to_github tool."
+        )
+        print(f"[LILO] Build-Mode: Neues Dashboard erstellen")
 
     print(f"[LILO] Initialisiere Client")
 
     # 4. Der Client Lifecycle
     async with ClaudeSDKClient(options=options) as client:
-        
+
         # Anfrage senden
-        await client.query("Baue das Dashboard")
+        await client.query(query)
 
         # 5. Antwort-Schleife
         # receive_response() liefert alles bis zum Ende des Auftrags
@@ -188,7 +264,23 @@ async def main():
             # B. Wenn er fertig ist (oder Fehler)
             elif isinstance(message, ResultMessage):
                 status = "success" if not message.is_error else "error"
-                print(json.dumps({"type": "result", "status": status, "cost": message.total_cost_usd}), flush=True)
+                print(f"[LILO] Session ID: {message.session_id}")
+                
+                # Save session_id to file for future resume (AFTER ResultMessage)
+                if message.session_id:
+                    try:
+                        with open("/home/user/app/.claude_session_id", "w") as f:
+                            f.write(message.session_id)
+                        print(f"[LILO] ✅ Session ID in Datei gespeichert")
+                    except Exception as e:
+                        print(f"[LILO] ⚠️ Fehler beim Speichern der Session ID: {e}")
+                
+                print(json.dumps({
+                    "type": "result", 
+                    "status": status, 
+                    "cost": message.total_cost_usd,
+                    "session_id": message.session_id
+                }), flush=True)
 
 if __name__ == "__main__":
     asyncio.run(main())

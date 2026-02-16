@@ -1,6 +1,6 @@
 // AUTOMATICALLY GENERATED SERVICE
 import { APP_IDS } from '@/types/app';
-import type { Werkzeuge, Mitarbeiter, Projekte, Werkzeugzuweisung, Wartung } from '@/types/app';
+import type { Mitarbeiter, Werkzeuge, Wartung, Projekte, Werkzeugzuweisung } from '@/types/app';
 
 // Base Configuration
 const API_BASE_URL = 'https://my.living-apps.de/rest';
@@ -31,6 +31,27 @@ async function callApi(method: string, endpoint: string, data?: any) {
 }
 
 export class LivingAppsService {
+  // --- MITARBEITER ---
+  static async getMitarbeiter(): Promise<Mitarbeiter[]> {
+    const data = await callApi('GET', `/apps/${APP_IDS.MITARBEITER}/records`);
+    return Object.entries(data).map(([id, rec]: [string, any]) => ({
+      record_id: id, ...rec
+    }));
+  }
+  static async getMitarbeiterEntry(id: string): Promise<Mitarbeiter | undefined> {
+    const data = await callApi('GET', `/apps/${APP_IDS.MITARBEITER}/records/${id}`);
+    return { record_id: data.id, ...data };
+  }
+  static async createMitarbeiterEntry(fields: Mitarbeiter['fields']) {
+    return callApi('POST', `/apps/${APP_IDS.MITARBEITER}/records`, { fields });
+  }
+  static async updateMitarbeiterEntry(id: string, fields: Partial<Mitarbeiter['fields']>) {
+    return callApi('PATCH', `/apps/${APP_IDS.MITARBEITER}/records/${id}`, { fields });
+  }
+  static async deleteMitarbeiterEntry(id: string) {
+    return callApi('DELETE', `/apps/${APP_IDS.MITARBEITER}/records/${id}`);
+  }
+
   // --- WERKZEUGE ---
   static async getWerkzeuge(): Promise<Werkzeuge[]> {
     const data = await callApi('GET', `/apps/${APP_IDS.WERKZEUGE}/records`);
@@ -52,25 +73,25 @@ export class LivingAppsService {
     return callApi('DELETE', `/apps/${APP_IDS.WERKZEUGE}/records/${id}`);
   }
 
-  // --- MITARBEITER ---
-  static async getMitarbeiter(): Promise<Mitarbeiter[]> {
-    const data = await callApi('GET', `/apps/${APP_IDS.MITARBEITER}/records`);
+  // --- WARTUNG ---
+  static async getWartung(): Promise<Wartung[]> {
+    const data = await callApi('GET', `/apps/${APP_IDS.WARTUNG}/records`);
     return Object.entries(data).map(([id, rec]: [string, any]) => ({
       record_id: id, ...rec
     }));
   }
-  static async getMitarbeiterEntry(id: string): Promise<Mitarbeiter | undefined> {
-    const data = await callApi('GET', `/apps/${APP_IDS.MITARBEITER}/records/${id}`);
+  static async getWartungEntry(id: string): Promise<Wartung | undefined> {
+    const data = await callApi('GET', `/apps/${APP_IDS.WARTUNG}/records/${id}`);
     return { record_id: data.id, ...data };
   }
-  static async createMitarbeiterEntry(fields: Mitarbeiter['fields']) {
-    return callApi('POST', `/apps/${APP_IDS.MITARBEITER}/records`, { fields });
+  static async createWartungEntry(fields: Wartung['fields']) {
+    return callApi('POST', `/apps/${APP_IDS.WARTUNG}/records`, { fields });
   }
-  static async updateMitarbeiterEntry(id: string, fields: Partial<Mitarbeiter['fields']>) {
-    return callApi('PATCH', `/apps/${APP_IDS.MITARBEITER}/records/${id}`, { fields });
+  static async updateWartungEntry(id: string, fields: Partial<Wartung['fields']>) {
+    return callApi('PATCH', `/apps/${APP_IDS.WARTUNG}/records/${id}`, { fields });
   }
-  static async deleteMitarbeiterEntry(id: string) {
-    return callApi('DELETE', `/apps/${APP_IDS.MITARBEITER}/records/${id}`);
+  static async deleteWartungEntry(id: string) {
+    return callApi('DELETE', `/apps/${APP_IDS.WARTUNG}/records/${id}`);
   }
 
   // --- PROJEKTE ---
@@ -113,27 +134,6 @@ export class LivingAppsService {
   }
   static async deleteWerkzeugzuweisungEntry(id: string) {
     return callApi('DELETE', `/apps/${APP_IDS.WERKZEUGZUWEISUNG}/records/${id}`);
-  }
-
-  // --- WARTUNG ---
-  static async getWartung(): Promise<Wartung[]> {
-    const data = await callApi('GET', `/apps/${APP_IDS.WARTUNG}/records`);
-    return Object.entries(data).map(([id, rec]: [string, any]) => ({
-      record_id: id, ...rec
-    }));
-  }
-  static async getWartungEntry(id: string): Promise<Wartung | undefined> {
-    const data = await callApi('GET', `/apps/${APP_IDS.WARTUNG}/records/${id}`);
-    return { record_id: data.id, ...data };
-  }
-  static async createWartungEntry(fields: Wartung['fields']) {
-    return callApi('POST', `/apps/${APP_IDS.WARTUNG}/records`, { fields });
-  }
-  static async updateWartungEntry(id: string, fields: Partial<Wartung['fields']>) {
-    return callApi('PATCH', `/apps/${APP_IDS.WARTUNG}/records/${id}`, { fields });
-  }
-  static async deleteWartungEntry(id: string) {
-    return callApi('DELETE', `/apps/${APP_IDS.WARTUNG}/records/${id}`);
   }
 
 }
